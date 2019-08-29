@@ -6,11 +6,18 @@ import pandas as pd
 host = "10.81.97.126"
 port = 9200
 final_scroll_data_all=pd.DataFrame([])#used to collect search query from each month
-for i in range(1, 31):#day 1 to day 31 for this month if available
+
+import datetime
+now = datetime.datetime.now()#input the current month of the date from system
+
+if now.month<10:#format month to match with ELK index
+    m=str(0)+str(now.month)
+
+for i in range(1, 31):#day 1 to day 31 for this month
     if i <10:
         i=str(0)+str(i)
     print(i)
-    index = str("txn-30-day-2019.08.")+str(i)
+    index = str("txn-30-day-2019.")+m+'.'+str(i)
 
     es = ES(host=host, port=port, timeout=100)
 
@@ -70,7 +77,7 @@ for i in range(1, 31):#day 1 to day 31 for this month if available
         df.columns=['raw_query', 'corrected_query']
         final_scroll_data=pd.concat([final_scroll_data, df]).drop_duplicates()#unique search query
     final_scroll_data_all=pd.concat([final_scroll_data_all, final_scroll_data])
-
+        
 
 final_scroll_data_all=final_scroll_data_all.drop_duplicates()
 final_scroll_data_all.to_csv('ELK_data.csv')#save the file to the directory you located
