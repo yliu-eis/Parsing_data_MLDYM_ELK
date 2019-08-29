@@ -6,7 +6,7 @@ import pandas as pd
 host = "10.81.97.126"
 port = 9200
 final_scroll_data_all=pd.DataFrame([])#used to collect search query from each month
-for i in range(1, 31):#day 1 to day 31 for this month
+for i in range(1, 31):#day 1 to day 31 for this month if available
     if i <10:
         i=str(0)+str(i)
     print(i)
@@ -73,6 +73,6 @@ for i in range(1, 31):#day 1 to day 31 for this month
 
 
 final_scroll_data_all=final_scroll_data_all.drop_duplicates()
-final_scroll_data_all.to_csv('ELK_data.csv')
+final_scroll_data_all.to_csv('ELK_data.csv')#save the file to the directory you located
 print("total unique search query:", len(final_scroll_data_all))
 final_scroll_data_all.head(50)
